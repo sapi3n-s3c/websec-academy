@@ -1,0 +1,21 @@
+Goal: identify a column that is compatible with string data in order to inject a string value on to the page
+
+Analysis:
+--------
+
+(1) Find the number of columns that the vulnerable app is using:
+' order by 1-- --> not displayed on page
+' order by 2-- --> column is displayed on the page
+' order by 3-- --> column is displayed on the page
+' order by 4-- --> Internal Server Error
+
+The app is using 3 columns
+
+(2) Find which columns contain text. Once we figure this out we can use that column to inject the desired string.
+Since we know the app is using 3 columns we can infer from the page that the second column contains text due to it being the column containing names of products
+
+' UNION SELECT NULL,'a',NULL--  --> outputs 'a' in the product names field
+
+(3) We can now use this to inject the string into the page 
+
+' UNION SELECT NULL,'hp7U1A',NULL--
