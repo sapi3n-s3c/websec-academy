@@ -23,8 +23,6 @@ def exploit_sqli_users_table(url):
 
 if __name__ == "__main__":
     try:
-        print(sys.argv[1].strip())
-        print('**')
         url = sys.argv[1].strip()
     except IndexError:
         print(f'[-] Usage: {sys.argv[0]} <url>')
