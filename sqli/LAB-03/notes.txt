@@ -1,2 +1,16 @@
 Goal: SQL injection UNION attack, determining the number of columns returned by the query
 To solve the lab, determine the number of columns returned by the query by performing an SQL injection UNION attack that returns an additional row containing null values. 
+
+Analysis:
+--------
+
+To find the number of columns that the vulnerable app is using - you can user the 'order by' SQL clause. 'order by' attempts to order the columns,
+if the columns is present then it will organize it numberically/alphabetically - if it is not present then it will return an error. Once the error 
+occurs you can deduce the number of columns by whatever order by {num} - 1
+
+' order by 1-- --> not displayed on page
+' order by 2-- --> column is displayed on the page
+' order by 3-- --> column is displayed on the page
+' order by 4-- --> Internal Server Error
+
+4 - 1 =  3 --> The app is using 3 columns
