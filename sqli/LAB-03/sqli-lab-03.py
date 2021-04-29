@@ -15,7 +15,6 @@ def exploit_sqli_column_num(url):
         res = r.text
         if 'Internal Server Error' in res:
             return i - 1
-        # i = i + 1
         i += 1
     return False
 
