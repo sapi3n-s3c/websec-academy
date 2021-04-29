@@ -10,6 +10,7 @@ Analysis:
 ' order by 2-- --> column is displayed on the page
 ' order by 3-- --> Internal Server Error
 
+
 3 - 1 =  2 --> The app is using 2 columns
 
 (2) Find which columns contain text. We need to figure this out because our desired output will be in strings i.e usernames/password so we need to find columns
