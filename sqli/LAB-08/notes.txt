@@ -4,7 +4,6 @@ In order to display the version of the database we first need to find out its ty
 After we have determined that the database is vulnerable to SQLi - we can structure queries using the different syntax per type of database
 
 
-
 Microsoft: ' union select null, @@version -- --> Internal Server Error
 
 PostgreSQL: ' union select null, version()-- --> Internal Server Error
