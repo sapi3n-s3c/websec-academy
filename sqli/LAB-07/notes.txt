@@ -1,0 +1,11 @@
+Goal: To solve the lab, display the database version string. 
+
+Analysis:
+As with previous labs you can tell SQL to order the database with the ' order by..' statement:
+' order by 1-- >> this time it results with a 500 error due to possibly not liking one of the characters used
+' order by 1# >> the # character can also be used as comment - this time returns a 200 response
+After further probing with the 'order by' by statement - we find that the page is using two columns
+
+Since we know from the lab its MySQL & Microsoft we can refer to the correct syntax to query the database version
+
+' union select null, @@version# >> gives the version: 8.0.23
