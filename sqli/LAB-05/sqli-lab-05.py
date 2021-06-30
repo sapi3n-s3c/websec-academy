@@ -23,7 +23,7 @@ def exploit_sqli_users(url):
         return True
     return False
 #----------------
-#Line 22 is saying: find string > find parent html element '<tr>' > find the next '<td>' element > display first element in content
+#Line 21 is saying: find string > find parent html element '<tr>' > find the next '<td>' element > display first element in content
 #refer to res to see html structure
 #----------------
     
