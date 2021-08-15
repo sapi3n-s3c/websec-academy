@@ -8,4 +8,10 @@ Goals:
 
 Analysis
  ---------
- 
+When testing for Blind SQL the first step is to force a TRUE/FALSE use case to see how to application responds. If there is a difference in response you can
+then figure out how to exploit the web app. For this lab we are going to focus on using the tracking ID to trigger a TRUE/FALSE USE case.
+
+1.  Confirm that the parameter is vulnerable to Blind SQL
+select tracking-id from tracking-table where trackingid = 'wj6FkJCkmttewQap'
+-> if this tracking id exists -> query returns value -> 'Welcome Back' message
+-> if doesnt exist -> no 'Welcome Back' message

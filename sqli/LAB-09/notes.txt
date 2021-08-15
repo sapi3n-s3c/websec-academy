@@ -7,7 +7,7 @@ Goals
 
  Analysis:
  ----------
- 1. Find the number of columns
+1. Find the number of columns
     ' order by 2-- >> 200
     ' order by 3-- >> 500
     Using 2 columns
