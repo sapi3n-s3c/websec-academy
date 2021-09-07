@@ -46,8 +46,9 @@ then figure out how to exploit the web app. For this lab we are going to focus o
 
     select tracking-id from tracking-table where trackingid = 'wj6FkJCkmttewQap' and (select username from users where username='administrator' and LENGTH(password)>1)='administrator'--
 
-    Here we are enumerating the length of the password for administrator, to do this -> send request to burp intruder and select the length of the password as the position so you can brute force the length until you find a different response length. When the
-    length responds with a different code you know that the output of the result is different indicating the lenght of the password is now FALSE. 
+    Here we are enumerating the length of the password for administrator, to do this -> send request to burp intruder and select the length of the password as the position so you can brute 
+    force the length until you find a different response length. 
+    When the length responds with a different code you know that the output of the result is different indicating the length of the password is now FALSE. 
     --> Password is 20 characters
 
 
@@ -57,7 +58,7 @@ then figure out how to exploit the web app. For this lab we are going to focus o
     This will enumerate the character value of the password starting with 'a'. Send this request to burp intruder - for payload type select 'Brute Forcer' and set a single position for the single
     character in the request that we are targeting. 
 
-    To use burp and enumerate the entire password 
+    To use burp and enumerate the entire password: 
     -send request to intruder
     -set attack type to 'Cluster Bomb'
     -add position for the first parameter in the substring method --> substring(password,§1§,1)
