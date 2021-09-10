@@ -1,0 +1,13 @@
+Lab #13 - Blind SQLi with time delays
+
+Vulnerable parameter - tracking cookie
+
+End Goal:
+- prove that the field is vulnerable to blink SQLi
+
+Analysis:
+ ---------
+
+The query when submitted will look like this on the backend: select tracking-id from tracking-table where trackingid='adHJklIB3kMwEr' || 
+ || (SELECT sleep(10))--
+So all we are saying is to query the tracking cookie and then tell the app to wait for 10sec
