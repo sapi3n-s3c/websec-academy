@@ -7,7 +7,8 @@ End Goal:
 
 Analysis:
  ---------
+To exploit a time delay - we are leveraging SQL code to be ran when when the expression is TRUE. Before we were leveraging the response of the app to show the response of our boolean payloads. Since we dont have that here we can run a boolean statement and then add a time delay. If the expression is TRUE then the time delay will run and the response wil lag - if it is false then there will be no time delay. The syntax you use for sleep is dependent on the type of SQL database (refer to cheat sheet)
 
-The query when submitted will look like this on the backend: select tracking-id from tracking-table where trackingid='adHJklIB3kMwEr' || 
- || (SELECT sleep(10))--
-So all we are saying is to query the tracking cookie and then tell the app to wait for 10sec
+The query when submitted will look like this on the backend: select tracking-id from tracking-table where trackingid='adHJklIB3kMwEr' || SELECT pg_sleep(10)--';
+Translation -->  query the tracking cookie and then tell the app to wait for 10sec
+
