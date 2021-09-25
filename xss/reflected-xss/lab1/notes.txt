@@ -1,0 +1,13 @@
+Lab1: Reflected XSS into HTML context with nothing encoded
+
+Goal: perform a cross-site scripting attack that calls the alert function.
+
+Analysis:
+--------
+
+Reflected XSS is the simplest variety of cross-site scripting. It arises when an application receives data in an HTTP request and includes that data within the immediate response in an unsafe way. 
+
+To test for this we need to inject an alert statement to see if the application responds with the JS alert.
+
+1. Inject alert statement into search bar 
+    <script>alert(1)</script> --> triggers alert(1), the app is vulnerable to reflected XSS
