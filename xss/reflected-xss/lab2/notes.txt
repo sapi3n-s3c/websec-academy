@@ -4,3 +4,24 @@ This lab contains a reflected XSS vulnerability in the search functionality but 
 
 Goal: Perform a cross-site scripting attack that bypasses the WAF and calls the print() function. 
 
+1. Test to see if the the application is vulnerable to XSS
+    You can first submit the payload <img src=1 onerror=print()> to the search bar. This returns an error stating that 'tags' are not allowed.
+
+2. Test which tags and attributes are being blocked
+    Send the search request to burp intruder
+        -In the Positions tab, click "Clear §". Replace the value of the search term with: <>
+        -Place the cursor between the angle brackets and click "Add §" twice, to create a payload position. The value of the search term should now look like: <§§>
+        -Visit the XSS cheat sheet and click "Copy tags to clipboard"
+        -In Burp Intruder, in the Payloads tab, click "Paste" to paste the list of tags into the payloads list. Click "Start attack"
+    When the attack is finished, review the results. Note that all payloads caused an HTTP 400 response, except for the body payload, which caused a 200 response. We know now that the WAF is not blocking body tags
+
+3. Test which event handlers are being blocked. We need to figure this out because we want to force the app to do some sort of action in order for us to inject a      vulnerability. E.g in our first payload we purposefully triggered 'onerror' to try and print to the screen. 
+    -Go back to the Positions tab in Burp Intruder and replace your search term with: <body%20=1>
+    -Place the cursor before the = character and click "Add §" twice, to create a payload position. Value of the search term should now look like: <body%20§§=1>
+    -Visit the XSS cheat sheet and click "copy events to clipboard". 
+    -In the Payloads tab, click "Clear" to remove the previous payloads. Then click "Paste" to paste the list of attributes into the payloads list. Start attack.
+    -Review the results, all payloads caused an HTTP 400 response, except for the onresize payload = 200 response.
+
+4. Inject payload
+    Go to the exploit server and paste the following code, replacing your-lab-id with your lab ID:
+    <iframe src="https://your-lab-id.web-security-academy.net/?search=%22%3E%3Cbody%20onresize=print()%3E" onload=this.style.width='100px'> Click "Store" and "Deliver exploit to victim". 
